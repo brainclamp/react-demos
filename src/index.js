@@ -19,7 +19,6 @@ const Box = styled(Tag.div)`
   ${space} 
   ${color}
   ${width}
-  
 `
 Box.propTypes = {
   ...space.propTypes,
@@ -51,7 +50,7 @@ Text.propTypes = {
 
  // See 'Tag' working in inspector by switching between these 2 commented lines //////////////////
 const Heading = Text.withComponent(Tag.h2)
-//const Heading = Text.withComponent('h2')
+// const Heading = Text.withComponent('h2')
 
 Heading.defaultProps = {
   fontSize: 5,
