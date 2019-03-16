@@ -1,97 +1,103 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import styled, {ThemeProvider} from 'styled-components';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import styled, {ThemeProvider, createGlobalStyle} from 'styled-components'
+import { space, color, width, fontFamily, fontSize, fontWeight, textAlign, lineHeight, } from 'styled-system'
+import Tag from 'clean-tag'
+import theme from './theme' // Import vars from external file - JS {theme} object
 
-// Extract Sass variables into a JS {theme} object
-const theme = require('sass-extract-loader?{"plugins": ["sass-extract-js"]}!./vars.scss');
+const Style = createGlobalStyle`
+  * { box-sizing: border-box; font-family: Sans-serif;}
+  body {margin:0;}
+`
 
-const Title = (props) => (<p className={props.className}>Minimal React / Sass / Styled-Components / Webpack / Babel Setup</p>);
-
-// Styled-Component - basic
-const Wrapper = styled.div`
-  font-family: Sans-serif;
-  > div {
-    text-align: center;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-  }
-  button {
-    display: block;
-    margin: 1rem auto;
-  }
-`;
-Wrapper.displayName = 'Wrapper';
-
-// Styled-Component - style an existing component (must pass in (props) & declare className in target component)
-const StyledExisting = styled(Title)`
-  color: red;
-`;
-StyledExisting.displayName = 'StyledExisting';
-
-// Styled-Component   various ways of using values from {theme} with props controls
-const ButtonFromTheme = styled.button`
-  width: 100px
-  border: ${props => props.inverted ? `1px solid ${props.theme.primary}` : 'none'};
-  border-radius: ${props => props.theme.baseRadius};
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  display: inline-block;
+// Styled-System ////////////////////////////////////////////////////////
+const Wrapper = styled(Tag)`
+  font-family: system-ui, sans-serif;
+`
+// declare required style objects in components (theme then defaults)
+const Box = styled(Tag.div)`
+  ${space} 
+  ${color}
+  ${width}
   
-  font-family: ${props => props.theme.fontSans};
-  font-size: ${props => {
-    const { baseFontSize } = props.theme;
-    const baseFontSizeParsed = parseInt(baseFontSize, 10);
-    return (props.small && `${baseFontSizeParsed * 0.875}px`)
-      || (props.large && `${baseFontSizeParsed * 1.375}px`)
-      || baseFontSize;
-  }};
-  font-weight: ${props => props.theme.fontSemibold};
-  line-height: ${props => (props.small && '2.2') || (props.large && '1.25') || '2.5'};
+`
+Box.propTypes = {
+  ...space.propTypes,
+  ...width.propTypes,
+  ...fontSize.propTypes,
+  ...color.propTypes,
+}
 
-  padding: ${props => props.large ? '16px 25px 17px' : '0 12px'};
-  position: relative;
-  text-align: center;
-  
-  color: ${props =>
-    (props.inverted && props.theme.primary)
-    || (props.link && props.theme.baseFontColor)
-    || '#fff'
-  };
-  background-color: ${props =>
-    (props.primary && props.theme.primary)
-    || (props.danger && props.theme.danger)
-    || ((props.inverted || props.link) && '#fff')
-    || (props.disabled && props.theme.brandGrey)
-  };
+const Text = styled(Tag)`
+  ${space}
+  ${fontSize}
+  ${fontWeight}
+  ${lineHeight}
+  ${color}
+  ${width}
+  ${fontFamily}
+  ${textAlign}
+`
+Text.propTypes = {
+  ...space.propTypes,
+  ...fontSize.propTypes,
+  ...fontWeight.propTypes,
+  ...fontFamily.propTypes,
+  ...lineHeight.propTypes,
+  ...color.propTypes,
+  ...width.propTypes,
+  ...textAlign.propTypes
+}
 
-  &:hover {
-    ${props => props.link && 'text-decoration: underline;'}
-    box-shadow: ${props => props.theme.baseBoxShadow};
-  }
-`;
-ButtonFromTheme.displayName = 'ButtonFromTheme';
+ // See 'Tag' working in inspector by switching between these 2 commented lines //////////////////
+const Heading = Text.withComponent(Tag.h2)
+//const Heading = Text.withComponent('h2')
 
-const BtnLinkFromTheme = ButtonFromTheme.withComponent('a');
-ButtonFromTheme.displayName = 'BtnLinkFromTheme';
+Heading.defaultProps = {
+  fontSize: 5,
+  lineHeight: 1.5,
+  m: 0
+}
+Heading.propTypes = {
+  ...space.propTypes,
+  ...fontSize.propTypes,
+  ...lineHeight.propTypes
+}
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-
     <Wrapper>
-      <div><Title /></div>
-      <div><StyledExisting /></div>
-      <div>
-        <ButtonFromTheme>Default</ButtonFromTheme>
-        <ButtonFromTheme primary>Primary</ButtonFromTheme>
-        <ButtonFromTheme danger>Danger</ButtonFromTheme>
-        <ButtonFromTheme small>Small</ButtonFromTheme>
-        <ButtonFromTheme large>Large</ButtonFromTheme>
-        <ButtonFromTheme inverted>Inverted</ButtonFromTheme>
-        <div><BtnLinkFromTheme link>Link</BtnLinkFromTheme></div>
-        <ButtonFromTheme disabled>Disabled</ButtonFromTheme>
-      </div>
+      <Style />
+      <Box
+        color='white'
+        bg='tomato' // 'tomato' falls back to css value if not in theme
+        width={{md: 1/2}} // using alias -pass object NOT array
+        m={[ 1, 2, 3, 4 ]} 
+        p={[ 1, 2, 3, 4 ]}
+      >
+        
+        <Heading 
+          fontWeight={['bold', '500']}
+          fontFamily={['mono', 'sans']}
+          fontSize={[ 0, 2, 4, 6 ]}
+        >
+          styled-system
+        </Heading>
+        
+        {}
+        <Text 
+          bg={['blue', 'navy']} 
+          color='white' 
+          width={[ 1, 3/4, 1/2 ]} // width using breakpoints array (use all breakpoints optional!)
+          fontSize={[ 0, 1, 3, 4 ]}
+          textAlign={['left', 'center']}
+          px={[ 1, 2, 2, 3 ]} // x-axis padding
+        >
+          Basic demo
+        </Text>
+
+      </Box>
     </Wrapper>
-  
   </ThemeProvider>,
   document.getElementById('app')
 );
