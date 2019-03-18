@@ -1,99 +1,71 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import styled, {ThemeProvider} from 'styled-components';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import Tag from 'clean-tag'
+import ms from 'modularscale-js'
+import styled, {createGlobalStyle} from 'styled-components'
+import {fontSize, color} from 'styled-system'
 
-// Extract Sass variables into a JS {theme} object
-const theme = require('sass-extract-loader?{"plugins": ["sass-extract-js"]}!./vars.scss');
+const Style = createGlobalStyle(`
+  * { box-sizing: border-box; }
+  body{ margin:0; }
+`)
 
-const Title = (props) => (<p className={props.className}>Minimal React / Sass / Styled-Components / Webpack / Babel Setup</p>);
+const LineOfText = styled(Tag)`
+  font-family: serif;
+  color: purple;
+  ${fontSize}
+  ${color}
+`
 
-// Styled-Component - basic
-const Wrapper = styled.div`
-  font-family: Sans-serif;
-  > div {
-    text-align: center;
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
+const modularScaleBaseInVW = 2.5 // desired fontsize base in vw's
+
+const responsiveModularScales = [ // responsive base/ratio objects
+  {
+    base: 16, // pixels value for lowest breakpoint range
+    ratio: 1.1
+  },
+  {
+    base: modularScaleBaseInVW,
+    ratio: 1.1
+  },
+  {
+    base: modularScaleBaseInVW, 
+    ratio: 1.4
+  },
+  {
+    base: 25.6, // pixels value for highest breakpoint range
+    ratio: 1.4
   }
-  button {
-    display: block;
-    margin: 1rem auto;
+]
+
+const responsiveBreakpoints = responsiveModularScales.length;
+const linesOfText = [] //demo readout
+
+for (let i = 0; i < 3; i++) { // create 3 lines of text
+
+  let responsiveModularScale = [] // one font size value from 'ms' plugin for each responsive range
+
+  for (let z = 0; z < responsiveBreakpoints; z++) { // loop all breakpoints
+
+    let modularScaledFontSize = ms(i, responsiveModularScales[z]).toFixed(2) // get modular scaled font size
+    modularScaledFontSize += (z === 0 || z === responsiveBreakpoints-1) ? 'px' : 'vw' // smallest & largest breakpoints -> PX / mid ranges -> VW
+    responsiveModularScale.push(modularScaledFontSize)
+    
   }
-`;
-Wrapper.displayName = 'Wrapper';
 
-// Styled-Component - style an existing component (must pass in (props) & declare className in target component)
-const StyledExisting = styled(Title)`
-  color: red;
-`;
-StyledExisting.displayName = 'StyledExisting';
-
-// Styled-Component   various ways of using values from {theme} with props controls
-const ButtonFromTheme = styled.button`
-  width: 100px
-  border: ${props => props.inverted ? `1px solid ${props.theme.primary}` : 'none'};
-  border-radius: ${props => props.theme.baseRadius};
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
-  display: inline-block;
-  
-  font-family: ${props => props.theme.fontSans};
-  font-size: ${props => {
-    const { baseFontSize } = props.theme;
-    const baseFontSizeParsed = parseInt(baseFontSize, 10);
-    return (props.small && `${baseFontSizeParsed * 0.875}px`)
-      || (props.large && `${baseFontSizeParsed * 1.375}px`)
-      || baseFontSize;
-  }};
-  font-weight: ${props => props.theme.fontSemibold};
-  line-height: ${props => (props.small && '2.2') || (props.large && '1.25') || '2.5'};
-
-  padding: ${props => props.large ? '16px 25px 17px' : '0 12px'};
-  position: relative;
-  text-align: center;
-  
-  color: ${props =>
-    (props.inverted && props.theme.primary)
-    || (props.link && props.theme.baseFontColor)
-    || '#fff'
-  };
-  background-color: ${props =>
-    (props.primary && props.theme.primary)
-    || (props.danger && props.theme.danger)
-    || ((props.inverted || props.link) && '#fff')
-    || (props.disabled && props.theme.brandGrey)
-  };
-
-  &:hover {
-    ${props => props.link && 'text-decoration: underline;'}
-    box-shadow: ${props => props.theme.baseBoxShadow};
-  }
-`;
-ButtonFromTheme.displayName = 'ButtonFromTheme';
-
-const BtnLinkFromTheme = ButtonFromTheme.withComponent('a');
-ButtonFromTheme.displayName = 'BtnLinkFromTheme';
+  linesOfText.push(<LineOfText key={i} fontSize={responsiveModularScale}>
+                    The quick brown fox jumps over the lazy dog 
+                    <LineOfText color='black' fontSize={14}>[{responsiveModularScale.join(' / ')}]</LineOfText>
+                   </LineOfText>)
+}
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
 
-    <Wrapper>
-      <div><Title /></div>
-      <div><StyledExisting /></div>
-      <div>
-        <ButtonFromTheme>Default</ButtonFromTheme>
-        <ButtonFromTheme primary>Primary</ButtonFromTheme>
-        <ButtonFromTheme danger>Danger</ButtonFromTheme>
-        <ButtonFromTheme small>Small</ButtonFromTheme>
-        <ButtonFromTheme large>Large</ButtonFromTheme>
-        <ButtonFromTheme inverted>Inverted</ButtonFromTheme>
-        <div><BtnLinkFromTheme link>Link</BtnLinkFromTheme></div>
-        <ButtonFromTheme disabled>Disabled</ButtonFromTheme>
-      </div>
-    </Wrapper>
-  
-  </ThemeProvider>,
-  document.getElementById('app')
+    <div>
+      {linesOfText}
+    </div>
+
+    ,document.getElementById('app')
 );
 
 module.hot.accept();
