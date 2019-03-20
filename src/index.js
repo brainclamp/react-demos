@@ -1,14 +1,25 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Button from '@material-ui/core/Button';
 
-const Wrapper = () => {return <p>Minimal React / Webpack / Babel Boilerplate</p>}
+function App() {
+  return (
+    <Button variant="text" color="primary">
+      Hello World
+    </Button>
+    
+  );
+}
+
 
 ReactDOM.render(
   
-    <Wrapper>
+  <React.Fragment>
+    <CssBaseline />
+    {<App />}
+  </React.Fragment>
 
-    </Wrapper>
-  
   ,document.getElementById('app')
 );
 
