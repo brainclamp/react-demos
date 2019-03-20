@@ -9,10 +9,6 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ['babel-loader']
-      },
-      {
-        test: /\.scss$/,
-        loader: 'sass-extract-loader'
       }
     ]
   },
