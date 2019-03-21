@@ -1,26 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Button from '@material-ui/core/Button';
+import React, { Component } from 'react'
+import ReactDOM from 'react-dom';
+import NavBar from './components/NavBar'
+import CoursesList from './components/CoursesList'
 
-function App() {
-  return (
-    <Button variant="text" color="primary">
-      Hello World
-    </Button>
-    
-  );
+class App extends Component {
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <CoursesList />
+      </div>
+    )
+  }
 }
 
-
-ReactDOM.render(
-  
-  <React.Fragment>
-    <CssBaseline />
-    {<App />}
-  </React.Fragment>
-
-  ,document.getElementById('app')
-);
-
-module.hot.accept();
+ReactDOM.render(<App />, document.getElementById('app'));
