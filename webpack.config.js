@@ -26,5 +26,8 @@ module.exports = {
   devServer: {
     contentBase: './dist'
   },
-  watch: true
+  watch: false,
+	watchOptions: {
+	  ignored: /node_modules/
+  }
 };
