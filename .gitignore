@@ -39,5 +39,4 @@ Thumbs.db
 ######################
 node_modules
 /f1000-react-boilerplate.code-workspace
-dist
 /.vscode
