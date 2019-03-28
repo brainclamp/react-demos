@@ -22,6 +22,8 @@
   },
   "dependencies": {
     "@material-ui/core": "^3.9.2",
+    "@material-ui/styles": "^3.0.0-alpha.10",
+    "@material-ui/system": "^3.0.0-alpha.2",
     "react": "^16.8.4",
     "react-dom": "^16.8.4"
   }
