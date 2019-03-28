@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { makeStyles, styled, withStyles } from '@material-ui/styles';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 // 3 different APIs ////////////////////////////////////////////
 // Hook API
@@ -76,6 +77,10 @@ const HOCButton = withStyles(styles)(HigherOrderComponent);
 //////////////////////////////////////////////////////////////////////////////
 ReactDOM.render(
   <CssBaseline>
+
+      <Typography component="div" variant="h1" gutterBottom>
+        h1. Heading
+      </Typography>
 
       <Button variant="contained" color="primary">
         Hello World
