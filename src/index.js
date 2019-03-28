@@ -1,20 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import PropTypes from "prop-types";
 
-
-const Wrapper = (props) => {return props.title}
-
-Wrapper.propTypes = {
-  title: PropTypes.string
-}
+import Button from '@material-ui/core/Button';
 
 ReactDOM.render(
   <CssBaseline>
-    <Wrapper title='Material UI - Basic'>
-      <CssBaseline />
-    </Wrapper>
+      <Button variant="contained" color="primary">
+        Hello World
+      </Button>
   </CssBaseline>
   ,document.getElementById('app')
 );
